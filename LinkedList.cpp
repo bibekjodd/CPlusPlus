@@ -1,22 +1,22 @@
 #include <iostream>
 using namespace std;
 
-class ListNode
+class Node
 {
 public:
     int val;
-    ListNode *next;
+    Node *next;
 
-    ListNode(int val)
+    Node(int val)
     {
         this->val = val;
         next = NULL;
     }
 };
 
-void insertAtHead(ListNode *&head, int val)
+void insertAtHead(Node *&head, int val)
 {
-    ListNode *n = new ListNode(val);
+    Node *n = new Node(val);
     if (!head)
     {
         head = n;
@@ -29,9 +29,9 @@ void insertAtHead(ListNode *&head, int val)
     }
 }
 
-void insertAtTail(ListNode *&head, int val)
+void insertAtTail(Node *&head, int val)
 {
-    ListNode *n = new ListNode(val);
+    Node *n = new Node(val);
     if (!head)
     {
         head = n;
@@ -39,14 +39,14 @@ void insertAtTail(ListNode *&head, int val)
     }
     else
     {
-        ListNode *temp = head;
+        Node *temp = head;
         while (temp->next)
             temp = temp->next;
         temp->next = n;
     }
 }
 
-void llTravesal(ListNode *head)
+void llTravesal(Node *head)
 {
     while (head)
     {
@@ -56,16 +56,16 @@ void llTravesal(ListNode *head)
     cout << "NULL\n";
 }
 
-void deleteHead(ListNode *&head)
+void deleteHead(Node *&head)
 {
-    ListNode *temp = head->next;
+    Node *temp = head->next;
     delete head;
     head = temp;
 }
 
-void deleteK(ListNode *&head, int k)
+void deleteK(Node *&head, int k)
 {
-    ListNode *temp = head;
+    Node *temp = head;
 
     while (temp->next->val != k)
     {
@@ -74,16 +74,16 @@ void deleteK(ListNode *&head, int k)
             return;
     }
 
-    ListNode *todelete = temp->next;
+    Node *todelete = temp->next;
     temp->next = temp->next->next;
     delete todelete;
 }
 
-ListNode *reverseLL(ListNode *&head)
+Node *reverseLL(Node *&head)
 {
-    ListNode *prev = NULL;
-    ListNode *curr = head;
-    ListNode *nxt;
+    Node *prev = NULL;
+    Node *curr = head;
+    Node *nxt;
 
     while (curr)
     {
@@ -96,34 +96,34 @@ ListNode *reverseLL(ListNode *&head)
     return prev;
 }
 
-ListNode *llReverse(ListNode *&head)
+Node *llReverse(Node *&head)
 {
     if (!head || !head->next)
         return head;
     cout << "Current head val is " << head->val << "\n";
-    ListNode *newHead = llReverse(head->next);
+    Node *newHead = llReverse(head->next);
     head->next->next = head;
     head->next = NULL;
 
     return newHead;
 }
 
-void makeCycle(ListNode *&head, int k)
+void makeCycle(Node *&head, int k)
 {
-    ListNode *temp = head;
+    Node *temp = head;
     while (temp->val != k)
         temp = temp->next;
 
-    ListNode *last = temp;
+    Node *last = temp;
     while (last->next)
         last = last->next;
     last->next = temp;
 }
 
-bool detectCycle(ListNode *head)
+bool detectCycle(Node *head)
 {
-    ListNode *fast = head;
-    ListNode *slow = head;
+    Node *fast = head;
+    Node *slow = head;
     while (fast && fast->next)
     {
         slow = slow->next;
@@ -134,10 +134,10 @@ bool detectCycle(ListNode *head)
     return 0;
 }
 
-void removeCycle(ListNode *&head)
+void removeCycle(Node *&head)
 {
-    ListNode *fast = head;
-    ListNode *slow = head;
+    Node *fast = head;
+    Node *slow = head;
 
     do
     {
@@ -154,7 +154,7 @@ void removeCycle(ListNode *&head)
     fast->next = NULL;
 }
 
-int length(ListNode *head)
+int length(Node *head)
 {
     int l = 0;
     while (head)
@@ -165,11 +165,11 @@ int length(ListNode *head)
     return l;
 }
 
-ListNode *kAppend(ListNode *&head, int k)
+Node *kAppend(Node *&head, int k)
 {
-    ListNode *newHead;
-    ListNode *tail = head;
-    ListNode *newTail = head;
+    Node *newHead;
+    Node *tail = head;
+    Node *newTail = head;
     int l = length(head);
     int count = 1;
 
@@ -187,10 +187,10 @@ ListNode *kAppend(ListNode *&head, int k)
     return newHead;
 }
 
-ListNode *mergeTwoSortedLL(ListNode *head1, ListNode *head2)
+Node *mergeTwoSortedLL(Node *head1, Node *head2)
 {
-    ListNode *dummyNode = new ListNode(-1);
-    ListNode *head = dummyNode;
+    Node *dummyNode = new Node(-1);
+    Node *head = dummyNode;
     while (head1 && head2)
     {
         if (head1->val < head2->val)
@@ -222,7 +222,7 @@ ListNode *mergeTwoSortedLL(ListNode *head1, ListNode *head2)
     return dummyNode->next;
 }
 
-ListNode *mergeSortedLL(ListNode *&head1, ListNode *&head2)
+Node *mergeSortedLL(Node *&head1, Node *&head2)
 {
     if (!head1)
         return head2;
@@ -230,7 +230,7 @@ ListNode *mergeSortedLL(ListNode *&head1, ListNode *&head2)
     if (!head2)
         return head1;
 
-    ListNode *result;
+    Node *result;
     if (head1->val < head2->val)
     {
         result = head1;
@@ -244,11 +244,11 @@ ListNode *mergeSortedLL(ListNode *&head1, ListNode *&head2)
     return result;
 }
 
-void putEvenAfterOdd(ListNode *&head)
+void putEvenAfterOdd(Node *&head)
 {
-    ListNode *odd = head;
-    ListNode *even = head->next;
-    ListNode *evenStart = even;
+    Node *odd = head;
+    Node *even = head->next;
+    Node *evenStart = even;
     while (odd->next && even->next)
     {
         odd->next = even->next;
@@ -262,10 +262,10 @@ void putEvenAfterOdd(ListNode *&head)
 }
 
 // palindrome linked list
-ListNode *middle(ListNode *head)
+Node *middle(Node *head)
 {
-    ListNode *fast = head;
-    ListNode *slow = head;
+    Node *fast = head;
+    Node *slow = head;
     while (fast && fast->next)
     {
         slow = slow->next;
@@ -273,10 +273,10 @@ ListNode *middle(ListNode *head)
     }
     return slow;
 }
-bool isPalindrome(ListNode *head)
+bool isPalindrome(Node *head)
 {
-    ListNode *x = middle(head);
-    ListNode *newhead = reverseLL(x);
+    Node *x = middle(head);
+    Node *newhead = reverseLL(x);
     while (newhead)
     {
         if (newhead->val != head->val)
@@ -288,11 +288,11 @@ bool isPalindrome(ListNode *head)
 }
 
 // Reverse k nodes
-ListNode *reverseK(ListNode *head, int k)
+Node *reverseK(Node *head, int k)
 {
-    ListNode *prev = NULL;
-    ListNode *curr = head;
-    ListNode *nxt;
+    Node *prev = NULL;
+    Node *curr = head;
+    Node *nxt;
     int count = 0;
     while (curr != NULL && count < k)
     {
@@ -307,20 +307,20 @@ ListNode *reverseK(ListNode *head, int k)
     return prev;
 }
 
-ListNode *inPlace(ListNode *head)
+Node *inPlace(Node *head)
 {
-    ListNode *fast = head;
-    ListNode *slow = head;
+    Node *fast = head;
+    Node *slow = head;
     while (fast && fast->next)
     {
         slow = slow->next;
         fast = fast->next->next;
     }
-    ListNode *newhead = new ListNode(0);
-    ListNode *temp = newhead;
+    Node *newhead = new Node(0);
+    Node *temp = newhead;
     while (slow)
     {
-        ListNode *insert = slow;
+        Node *insert = slow;
         insert->next = temp->next;
         temp->next = insert;
         temp = temp->next->next;
@@ -331,7 +331,7 @@ ListNode *inPlace(ListNode *head)
 
 int main()
 {
-    ListNode *head = NULL;
+    Node *head = NULL;
     int a[] = {1, 2, 3, 4, 5, 6};
     for (int i = 0; i < sizeof(a) / sizeof(a[0]); i++)
         insertAtTail(head, a[i]);
