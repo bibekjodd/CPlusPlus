@@ -1,100 +1,114 @@
 #include <iostream>
 #include <vector>
 #include <stack>
-#include <cmath>
+#include <algorithm>
 using namespace std;
 
-int infixEvalution(string s)
+int precedence(char ch)
 {
-    stack<int> st;
-    int n = s.length() - 1;
-    for (int i = n; i >= 0; i--)
-    {
-        if (s[i] >= '0' && s[i] <= '9')
-            st.push(s[i] - '0');
-        else
-        {
-            int n1 = st.top();
-            st.pop();
-            int n2 = st.top();
-            st.pop();
+    if (ch == '^')
+        return 4;
 
-            switch (s[i])
-            {
-            case '-':
-                st.push(n1 - n2);
-                break;
-            case '+':
-                st.push(n1 + n2);
-                break;
-            case '*':
-                st.push(n1 * n2);
-                break;
-            case '/':
-                st.push(n1 / n2);
-                break;
-            case '^':
-                st.push(pow(n1, n2));
-                break;
-            }
-        }
-    }
-    int ans = 0;
-    if (st.empty())
-        return ans;
-    return st.top();
+    else if (ch == '/' || ch == '*')
+        return 3;
+
+    else if (ch == '+' || ch == '-')
+        return 2;
+
+    return 1;
 }
 
-int postfixEvaluation(string s)
+string infixToPostfix(string s)
 {
-    stack<int> st;
+    stack<char> st;
+    string ans = "";
     int n = s.length();
     for (int i = 0; i < n; i++)
     {
-        if (s[i] >= '0' && s[i] <= '9')
-            st.push(s[i] - '0');
+        if ((s[i] >= 'a' && s[i] <= 'z') || (s[i] >= 'A' && s[i] <= 'Z') || (s[i] >= '0' && s[i] <= '9'))
+            ans.push_back(s[i]);
+        else if (s[i] == '(')
+            st.push('(');
+        else if (s[i] == ')')
+        {
+            while (!st.empty() && st.top() != '(')
+            {
+                ans.push_back(st.top());
+                st.pop();
+            }
+            if (!st.empty())
+                st.pop();
+        }
         else
         {
-            int n2 = st.top();
-            st.pop();
-            int n1 = st.top();
-            st.pop();
-
-            switch (s[i])
+            while (!st.empty() && precedence(st.top()) > precedence(s[i]))
             {
-            case '-':
-                st.push(n1 - n2);
-                break;
-            case '+':
-                st.push(n1 + n2);
-                break;
-            case '*':
-                st.push(n1 * n2);
-                break;
-            case '/':
-                st.push(n1 / n2);
-                break;
-            case '^':
-                st.push(n1 ^ n2);
-                break;
+                ans.push_back(st.top());
+                st.pop();
             }
+            st.push(s[i]);
         }
     }
-    if (st.empty())
-        return 0;
-    return st.top();
+    while (!st.empty())
+    {
+        char ch = st.top();
+        if (
+            (ch >= 'a' && ch <= 'z') ||
+            (ch >= 'A' && ch <= 'Z') ||
+            (ch >= '0' && ch <= '9') ||
+            (ch == '^' || ch == '*' || ch == '/' || ch == '+' || ch == '-'))
+            ans.push_back(st.top());
+        st.pop();
+    }
+    return ans;
+}
+
+string infixToPrefix(string s)
+{
+    reverse(s.begin(), s.end());
+    int n = s.length();
+    for (int i = 0; i < n; i++)
+        if (s[i] == '(')
+            s[i] = ')';
+        else if (s[i] == ')')
+            s[i] = '(';
+    string ans = infixToPostfix(s);
+    reverse(ans.begin(), ans.end());
+    return ans;
+}
+
+bool balancedParenthesis(string s)
+{
+    int n = s.length();
+    stack<char> st;
+    for (int i = 0; i < n; i++)
+    {
+        if (s[i] == '(' || s[i] == '{' || s[i] == '[')
+            st.push(s[i]);
+        else if (s[i] == ')' || s[i] == '}' || s[i] == ']')
+        {
+            if (st.empty())
+                return 0;
+            if (s[i] == ')' && st.top() != '(')
+                return 0;
+            if (s[i] == '}' && st.top() != '{')
+                return 0;
+            if (s[i] == ']' && st.top() != '[')
+                return 0;
+            st.pop();
+        }
+    }
+    return st.empty();
 }
 
 int main()
 {
-    // -+7*45+20
-    // string s = "-+7*45+20";
-    // string s = "+4*23";
-    // string s = "";
-    // cout << infixEvalution(s) << "\n";
-
-    string s = "46+2/5*7+";
-    cout << postfixEvaluation(s) << "\n";
+    // string s = "(a-b/c)*(a/k-l)";
+    string s;
+    cin >> s;
+    // cout << "Prefix => " << infixToPrefix(s) << "\n\n";
+    // cout << "Postfix => " << infixToPostfix(s) << "\n";
+    cout << balancedParenthesis(s);
 
     return 0;
 }
