@@ -141,6 +141,75 @@ bool balancedHeight(Node *root)
     return 1;
 }
 
+void leftView(Node *root)
+{
+    if (!root)
+        return;
+
+    queue<Node *> q;
+    q.push(root);
+
+    while (!q.empty())
+    {
+        int n = q.size();
+        for (int i = 0; i < n; i++)
+        {
+            Node *front = q.front();
+            q.pop();
+            if (!i)
+                cout << front->val << " ";
+
+            if (front->left)
+                q.push(front->left);
+
+            if (front->right)
+                q.push(front->right);
+        }
+    }
+    cout << "\n";
+}
+
+void rightView(Node *root)
+{
+    if (!root)
+        return;
+
+    queue<Node *> q;
+    q.push(root);
+    while (!q.empty())
+    {
+        int n = q.size();
+        for (int i = 0; i < n; i++)
+        {
+            Node *front = q.front();
+            q.pop();
+            if (i == n - 1)
+                cout << front->val << " ";
+
+            if (front->left)
+                q.push(front->left);
+
+            if (front->right)
+                q.push(front->right);
+        }
+    }
+    cout << "\n";
+}
+
+bool find(Node *root, int key)
+{
+    if (!root)
+        return 0;
+
+    if (root->val == key)
+        return 1;
+
+    if (find(root->left, key) || find(root->right, key))
+        return 1;
+
+    return 0;
+}
+
 int main()
 {
     Node *root = NULL;
@@ -148,8 +217,10 @@ int main()
     root->left = new Node(2);
     root->right = new Node(3);
     root->left->left = new Node(4);
+    root->left->left->right = new Node(8);
     root->left->right = new Node(5);
     root->right->left = new Node(6);
+    root->right->left->left = new Node(9);
     root->right->right = new Node(7);
 
     // preorder(root);
@@ -166,7 +237,10 @@ int main()
 
     // cout << height(root);
 
-    cout << balancedHeight(root) << "\n";
+    // cout << balancedHeight(root) << "\n";
+    // leftView(root);
+    // rightView(root);
+    cout << find(root, 7) << "\n";
 
     return 0;
 }
