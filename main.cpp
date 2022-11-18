@@ -296,18 +296,75 @@ Node *deleteBST(Node *root, int key)
     return root;
 }
 
+void zigzagTraversal(Node *root)
+{
+    if (!root)
+        return;
+
+    stack<Node *> st1;
+    stack<Node *> st2;
+    st1.push(root);
+    bool leftToRight = true;
+
+    while (!st1.empty() || !st2.empty())
+    {
+        if (leftToRight)
+        {
+            while (!st1.empty())
+            {
+                Node *top = st1.top();
+                cout << top->val << " ";
+
+                if (top->left)
+                    st2.push(top->left);
+
+                if (top->right)
+                    st2.push(top->right);
+
+                st1.pop();
+            }
+            leftToRight = false;
+        }
+
+        else
+        {
+            while (!st2.empty())
+            {
+                Node *top = st2.top();
+                cout << top->val << " ";
+
+                if (top->right)
+                    st1.push(top->right);
+
+                if (top->left)
+                    st1.push(top->left);
+
+                st2.pop();
+            }
+            leftToRight = true;
+        }
+    }
+    cout << "\n";
+}
+
 int main()
 {
     Node *root = NULL;
-    // root = new Node(0);
-    // root->left = new Node(2);
-    // root->right = new Node(3);
-    // root->left->left = new Node(4);
-    // root->left->left->right = new Node(8);
-    // root->left->right = new Node(5);
-    // root->right->left = new Node(6);
-    // root->right->left->left = new Node(9);
-    // root->right->right = new Node(7);
+    root = new Node(0);
+    root->left = new Node(2);
+    root->right = new Node(3);
+    root->left->left = new Node(4);
+    root->left->right = new Node(5);
+    root->right->left = new Node(6);
+    root->right->right = new Node(7);
+    root->left->left->left=new Node(8);
+    root->left->left->right=new Node(9);
+    root->left->right->left=new Node(10);
+    root->left->right->right=new Node(11);
+    root->right->left->left = new Node(12);
+    root->right->left->right = new Node(13);
+    root->right->right->left = new Node(14);
+    root->right->right->right = new Node(15);
 
     // preorder(root);
     // cout << "\n";
@@ -334,26 +391,22 @@ int main()
     //     cout << "NO LCA exists for the node\n";
 
     // binary search tree
-    int n;
-    cin >> n;
-    int a[n];
-    for (int i = 0; i < n; i++)
-    {
-        cin >> a[i];
-        root = insertBST(root, a[i]);
-    }
+    // int n;
+    // cin >> n;
+    // int a[n];
+    // for (int i = 0; i < n; i++)
+    // {
+    //     cin >> a[i];
+    //     root = insertBST(root, a[i]);
+    // }
 
-    inorder(root);
-    cout << "\n";
+    // levelorder(root);
+    // inorder(root);
+    // cout << "\n";
+    zigzagTraversal(root);
 
     // cout << searchBST(root, 9) << "\n";
-    deleteBST(root, 1);
-    deleteBST(root, 2);
-    deleteBST(root, 9);
-    deleteBST(root, 8);
-    deleteBST(root, 6);
-    inorder(root);
-    cout << "\n";
+    // cout << "\n";
 
     return 0;
 }
