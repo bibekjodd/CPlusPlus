@@ -347,24 +347,42 @@ void zigzagTraversal(Node *root)
     cout << "\n";
 }
 
+// identical binary search tree
+bool identicalBST(Node *root1, Node *root2)
+{
+    if (!root1 && root2)
+        return false;
+
+    if (root1 && !root2)
+        return false;
+
+    if (!root1 && !root2)
+        return true;
+
+    bool cond1 = (root1->val == root2->val);
+    bool cond2 = identicalBST(root1->left, root2->left) && identicalBST(root1->right, root2->right);
+
+    return cond1 && cond2;
+}
+
 int main()
 {
     Node *root = NULL;
-    root = new Node(0);
-    root->left = new Node(2);
-    root->right = new Node(3);
-    root->left->left = new Node(4);
-    root->left->right = new Node(5);
-    root->right->left = new Node(6);
-    root->right->right = new Node(7);
-    root->left->left->left=new Node(8);
-    root->left->left->right=new Node(9);
-    root->left->right->left=new Node(10);
-    root->left->right->right=new Node(11);
-    root->right->left->left = new Node(12);
-    root->right->left->right = new Node(13);
-    root->right->right->left = new Node(14);
-    root->right->right->right = new Node(15);
+    // root = new Node(0);
+    // root->left = new Node(2);
+    // root->right = new Node(3);
+    // root->left->left = new Node(4);
+    // root->left->right = new Node(5);
+    // root->right->left = new Node(6);
+    // root->right->right = new Node(7);
+    // root->left->left->left=new Node(8);
+    // root->left->left->right=new Node(9);
+    // root->left->right->left=new Node(10);
+    // root->left->right->right=new Node(11);
+    // root->right->left->left = new Node(12);
+    // root->right->left->right = new Node(13);
+    // root->right->right->left = new Node(14);
+    // root->right->right->right = new Node(15);
 
     // preorder(root);
     // cout << "\n";
@@ -403,10 +421,24 @@ int main()
     // levelorder(root);
     // inorder(root);
     // cout << "\n";
-    zigzagTraversal(root);
+    // zigzagTraversal(root);
 
     // cout << searchBST(root, 9) << "\n";
     // cout << "\n";
+
+    Node *root1 = new Node(2);
+    root1->left = new Node(3);
+    root1->right = new Node(4);
+    root1->left->left = new Node(5);
+    root1->left->left->left = new Node(8);
+
+    Node *root2 = new Node(2);
+    root2->left = new Node(3);
+    root2->right = new Node(4);
+    root2->left->left = new Node(5);
+    root2->left->left->left = new Node(8);
+
+    cout << identicalBST(root1, root2) << "\n";
 
     return 0;
 }
