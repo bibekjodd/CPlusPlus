@@ -99,6 +99,42 @@ void DFS(ump<int, vi> &adjList)
 }
 // --------------------------------------------------------------------------------------------
 
+// ---------------------------detect cycle DFS---------------------------
+bool callDetectCycleDFS(int node, ump<int, vi> &adjList, ump<int, bool> &visited, ump<int, bool> &dfsVisited, int parent)
+{
+    visited[node] = true;
+    dfsVisited[node] = true;
+
+    for (auto i : adjList[node])
+    {
+        if (!visited[i])
+        {
+            if (callDetectCycleDFS(i, adjList, visited, dfsVisited, node))
+                return 1;
+        }
+        else if (dfsVisited[i] && i != parent)
+            return 1;
+    }
+    dfsVisited[node] = false;
+    return 0;
+}
+
+bool detectCycleDFS(ump<int, vi> &adjList)
+{
+    ump<int, bool> visited, dfsVisited;
+    for (auto i : adjList)
+    {
+        if (!visited[i.first])
+        {
+            if (callDetectCycleDFS(i.first, adjList, visited, dfsVisited, -1))
+                return 1;
+        }
+    }
+
+    return 0;
+}
+// --------------------------------------------------------------------------------------------
+
 int main()
 {
     int edges;
@@ -114,8 +150,10 @@ int main()
         adjList[v].pop_back();
     }
 
-    printAdj(adjList);
-    BFS(adjList);
-    DFS(adjList);
+    // printAdj(adjList);
+    // BFS(adjList);
+    // DFS(adjList);
+    cout << detectCycleDFS(adjList) << "\n";
+
     return 0;
 }
