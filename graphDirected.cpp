@@ -167,7 +167,41 @@ void topologicalSortDFS(ump<int, vi> &adjList)
 }
 // --------------------------------------------------------------------------------------------
 
+// ---------------------------topological sort in DAG using Kahn's Algorithm---------------------------
+void topologicalSortBFS(ump<int, vi> &adjList)
+{
+    ump<int, int> indegree;
+    for (auto i : adjList)
+    {
+        if (!indegree[i.first])
+            indegree[i.first] = 0;
 
+        for (auto j : i.second)
+            indegree[j]++;
+    }
+
+    vi ans;
+    queue<int> q;
+    for (auto i : indegree)
+        if (!indegree[i.first])
+            q.push(i.first);
+
+    while (!q.empty())
+    {
+        int front = q.front();
+        q.pop();
+        ans.push_back(front);
+        for (auto i : adjList[front])
+        {
+            indegree[i]--;
+            if (!indegree[i])
+                q.push(i);
+        }
+    }
+
+    printVector(ans);
+}
+// --------------------------------------------------------------------------------------------
 
 int main()
 {
@@ -189,6 +223,7 @@ int main()
     // DFS(adjList);
     // cout << detectCycleDFS(adjList) << "\n";
     topologicalSortDFS(adjList);
+    topologicalSortBFS(adjList);
 
     return 0;
 }
