@@ -171,6 +171,45 @@ bool detectCycleDFS(ump<int, vi> &adjList)
 }
 // --------------------------------------------------------------------------------------------
 
+// ---------------------------shortest path undirected non-weighted---------------------------
+void shortestPathUndirected(ump<int, vi> &adjList, int src, int dest)
+{
+    ump<int, bool> visited;
+    ump<int, int> parent;
+    vi ans;
+    queue<int> q;
+    q.push(src);
+    visited[src] = true;
+    parent[src] = -1;
+
+    while (!q.empty())
+    {
+        int front = q.front();
+        q.pop();
+
+        for (auto j : adjList[front])
+        {
+            if (!visited[j])
+            {
+                parent[j] = front;
+                visited[j] = true;
+                q.push(j);
+            }
+        }
+    }
+
+    while (dest != src)
+    {
+        ans.push_back(dest);
+        dest = parent[dest];
+    }
+    ans.push_back(src);
+
+    reverse(ans.begin(), ans.end());
+    printVector(ans);
+}
+// --------------------------------------------------------------------------------------------
+
 int main()
 {
     int edges;
@@ -188,8 +227,9 @@ int main()
     // printAdj(adjList);
     // BFS(adjList);
     // DFS(adjList);
-    cout << detectCycleBFS(adjList) << "\n";
-    cout << detectCycleDFS(adjList) << "\n";
+    // cout << detectCycleBFS(adjList) << "\n";
+    // cout << detectCycleDFS(adjList) << "\n";
+    shortestPathUndirected(adjList, 1, 6);
 
     return 0;
 }
