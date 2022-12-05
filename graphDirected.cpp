@@ -135,6 +135,40 @@ bool detectCycleDFS(ump<int, vi> &adjList)
 }
 // --------------------------------------------------------------------------------------------
 
+// ---------------------------topological sort in DAG using DFS---------------------------
+void callTopologicalSortDFS(int node, ump<int, vi> &adjList, ump<int, bool> &visited, stack<int> &ans)
+{
+    visited[node] = true;
+    for (auto i : adjList[node])
+    {
+        if (!visited[i])
+            callTopologicalSortDFS(i, adjList, visited, ans);
+    }
+    ans.push(node);
+}
+
+void topologicalSortDFS(ump<int, vi> &adjList)
+{
+    ump<int, bool> visited;
+    stack<int> ans;
+
+    for (auto i : adjList)
+    {
+        if (!visited[i.first])
+            callTopologicalSortDFS(i.first, adjList, visited, ans);
+    }
+
+    while (!ans.empty())
+    {
+        cout << ans.top() << " ";
+        ans.pop();
+    }
+    cout << "\n";
+}
+// --------------------------------------------------------------------------------------------
+
+
+
 int main()
 {
     int edges;
@@ -153,7 +187,8 @@ int main()
     // printAdj(adjList);
     // BFS(adjList);
     // DFS(adjList);
-    cout << detectCycleDFS(adjList) << "\n";
+    // cout << detectCycleDFS(adjList) << "\n";
+    topologicalSortDFS(adjList);
 
     return 0;
 }
