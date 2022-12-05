@@ -138,34 +138,32 @@ bool detectCycleBFS(ump<int, vi> &adjList)
 // --------------------------------------------------------------------------------------------
 
 // ---------------------------detect cycle by DFS---------------------------
-bool callDetectCycleDFS(int node, ump<int, vi> &adjList, ump<int, bool> &visited, ump<int, bool> &dfsVisited, int parent)
+bool callDetectCycleDFS(int node, ump<int, vi> &adjList, ump<int, bool> &visited, int parent)
 {
-    dfsVisited[node] = true;
     visited[node] = true;
 
     for (auto i : adjList[node])
     {
         if (!visited[i])
         {
-            if (callDetectCycleDFS(i, adjList, visited, dfsVisited, node))
+            if (callDetectCycleDFS(i, adjList, visited, node))
                 return 1;
         }
-        else if (dfsVisited[i] && i != parent)
+        else if (visited[i] && i != parent)
             return 1;
     }
-    dfsVisited[node] = false;
     return 0;
 }
 
 bool detectCycleDFS(ump<int, vi> &adjList)
 {
-    ump<int, bool> visited, dfsVisited;
+    ump<int, bool> visited;
 
     for (auto i : adjList)
     {
         if (!visited[i.first])
         {
-            if (callDetectCycleDFS(i.first, adjList, visited, dfsVisited, -1))
+            if (callDetectCycleDFS(i.first, adjList, visited, -1))
                 return 1;
         }
     }
