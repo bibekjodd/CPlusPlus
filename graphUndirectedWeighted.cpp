@@ -74,6 +74,67 @@ void dijkstrasAlgo(ump<int, vii> &adjList)
 }
 // --------------------------------------------------------------------------------------------
 
+// ---------------------------Prims Algorithm for MST---------------------------
+void primsAlgorithm(ump<int, vii> &adjList)
+{
+    int src = 0;
+    ump<int, int> key;
+    ump<int, bool> mst;
+    ump<int, int> parent;
+    int totalNodes = 0;
+    for (auto i : adjList)
+    {
+        key[i.first] = INT_MAX;
+        mst[i.first] = false;
+        parent[i.first] = -1;
+        totalNodes++;
+    }
+    key[src] = 0;
+    totalNodes--;
+    int totalEdges = 0;
+
+    while (totalEdges != totalNodes)
+    {
+
+        int mini = INT_MAX;
+        int node;
+        for (auto i : key)
+        {
+            if (mst[i.first] == false && i.second < mini)
+            {
+                node = i.first;
+                mini = i.second;
+            }
+        }
+
+        mst[node] = true;
+        totalEdges++;
+        for (auto i : adjList[node])
+        {
+            if (mst[i.second] == false && i.first < key[i.second])
+            {
+                parent[i.second] = node;
+                key[i.second] = i.first;
+            }
+        }
+    }
+
+    ump<int, vii> MST;
+    int totalWeight = 0;
+    for (auto i : parent)
+    {
+        if (i.second != -1)
+        {
+            MST[i.first].push_back({key[i.first], i.second});
+            MST[i.second].push_back({key[i.first], i.first});
+            totalWeight += key[i.first];
+        }
+    }
+    printAdj(MST);
+    cout << "Total weight is " << totalWeight << "\n";
+}
+// --------------------------------------------------------------------------------------------
+
 int main()
 {
     ump<int, vii> adjList;
@@ -88,8 +149,9 @@ int main()
         adjList[v].push_back({w, u});
     }
 
-    printAdj(adjList);
-    dijkstrasAlgo(adjList);
+    // printAdj(adjList);
+    // dijkstrasAlgo(adjList);
+    primsAlgorithm(adjList);
 
     return 0;
 }
